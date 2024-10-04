@@ -19,5 +19,4 @@ $app->group('/test/', function() {
     $this->get('get', TestController::class . ":get");
 });
 
-
 ?>
