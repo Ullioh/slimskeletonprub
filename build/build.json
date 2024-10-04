@@ -1,0 +1,28 @@
+{
+    "controller":{
+        "namespace":["App","Controller"],
+        "use":[
+            ["App","Config","InitController"],
+            ["App","Config","ConfigGlobal"],
+            ["App","Lib","Validate"],
+            ["App","Lib","Response"],
+            ["App","Lib","MailSender"]
+        ]
+    },
+    "lib":{
+        "namespace":["App","Lib"]
+    },
+    "model":{
+        "namespace":["App","Model"],
+        "use":[
+            ["App","Config","ConfigGlobal"],
+            ["App","Config","InitModel"],
+            ["App","Lib","Database"]
+        ]
+    },
+    "route":{
+        "use":[
+            ["App","Config","InitModel"]
+        ]
+    }
+}
