@@ -10,7 +10,6 @@ $app->group('/test/',function(){
     $this->get('test', TestController::class.":test");
     $this->post('test_middleware', TestController::class.":test")->add($middleware);
     $this->get('get', TestController::class.":get");
-
 });
 
 
