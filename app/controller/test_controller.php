@@ -40,6 +40,20 @@ class TestController extends InitController
         );
     }
 
+    //nuevo metdo en el controlador
+
+    public function newMethod($req, $res, $args){
+    // Aquí colocas la lógica que desees    
+    return $res
+        ->withHeader('Content-type', 'application/json')
+        ->withStatus(200)
+        ->write(
+            json_encode(
+                "nueva ruta de prueba"
+            )
+        );
+    } // end of new route
+
     public function get($req,$res,$args){
         $var = $req->getQueryParams();
         $this->validate->setRequireExtended($var,array(
@@ -68,4 +82,5 @@ class TestController extends InitController
             )
         );
     }
+
 }
