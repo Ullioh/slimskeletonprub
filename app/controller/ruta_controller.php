@@ -29,17 +29,6 @@ class RutaController extends InitController
         $this->itemTestModel = new ItemTestModel();
     }
 
-    public function test($req,$res,$args){
-        return $res
-        ->withHeader('Content-type', 'application/json')
-        ->withStatus(200)
-        ->write(
-            json_encode(
-                "Hola"
-            )
-        );
-    }
-
     //nuevo metdo en el controlador
 
     public function newMethod($req, $res, $args){
@@ -67,34 +56,5 @@ class RutaController extends InitController
             )
         );
     } // fin de la ruta de mandar. 
-
-    public function get($req,$res,$args){
-        $var = $req->getQueryParams();
-        $this->validate->setRequireExtended($var,array(
-            "id"   => array(
-                "type"     => "is_numeric",
-            ),
-        ));
-
-        if(!$data = $this->validateData($this->validate)){
-            return $this->ending($res,$this->validate);
-        }
-
-        $all = $this->itemTestModel
-                ->innerJoin(new TestModel(),"test.id = item_test.id_test")
-                ->select(["item","email"])
-                ->getAllBy(["id_te st"=>1]);
-
-        $this->respuesta->setResponse(true,200,"");
-        $this->respuesta->data = $all;
-        return $res
-        ->withHeader('Content-type', 'application/json')
-        ->withStatus(200)
-        ->write(
-            json_encode(
-                $this->respuesta
-            )
-        );
-    }
 
 }

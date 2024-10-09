@@ -7,10 +7,6 @@ $app->group('/ruta/',function(){
 
     $middleware = Middleware::class.":onlyUser";;
 
-    $this->get('test', RutaController::class.":test");
-    $this->post('test_middleware', RutaController::class.":test")->add($middleware);
-    $this->get('get', RutaController::class.":get");
-
     // Nueva ruta
     $this->get('new', RutaController::class.":newMethod");
 
