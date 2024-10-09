@@ -1,9 +1,12 @@
 <?php
 namespace App\Config;
 
-class ConfigGlobal{
-    private $dbname = "";
-    private $dbuser = "";
+use PDO;
+use PDOException;
+
+class ConfigGlobal {
+    private $dbname = "test_slim";
+    private $dbuser = "root";
     private $dbpassword = "";
 
     private $token_key = "";
@@ -19,8 +22,9 @@ class ConfigGlobal{
     private $url_base = "";
     private $url_front = "";
 
-    public function __CONSTRUCT(){
-        //DB
+    public function __CONSTRUCT() {
+        // Configuración de base de datos
+        // También puedes considerar manejar las credenciales de forma más segura
         $this->dbname = "test_slim";
         $this->dbuser = "root";
         $this->dbpassword = "";
@@ -37,48 +41,50 @@ class ConfigGlobal{
         $this->mail_password = "";
 
         //local
-        $this->url_base         = "http://127.0.0.1/slimSkeleton/";
-        $this->server           = "http://".$_SERVER["HTTP_HOST"]."/slimSkeleton/";
-        $this->url_front        = "http://localhost:4200/";
-
-        //************/
-        // $this->url_base         = "http://back.url.com/";
-        // $this->server           = "http://".$_SERVER["HTTP_HOST"]."/";
-        // $this->url_front        = "http://front.url.com/";
+        $this->url_base = "http://127.0.0.1/slimSkeleton/";
+        $this->server = "http://" . $_SERVER["HTTP_HOST"] . "/slimSkeleton/";
+        $this->url_front = "http://localhost:4200/";
     }
 
-    public function getDb(){
-        return array(
-            "dbname"        =>  $this->dbname,
-            "dbuser"        =>  $this->dbuser,
-            "dbpassword"    =>  $this->dbpassword,
-        );
+    public function getDb() {
+        try {
+            // Crear la conexión a la base de datos utilizando PDO
+            $dsn = "mysql:host=localhost;dbname=" . $this->dbname;
+            $pdo = new PDO($dsn, $this->dbuser, $this->dbpassword);
+            $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            return $pdo; // Devuelve la conexión
+        } catch (PDOException $e) {
+            // Manejo de errores en caso de que la conexión falle
+            echo "Error de conexión: " . $e->getMessage();
+            return null;
+        }
     }
 
-    public function getTokenkey(){
+    public function getTokenkey() {
         return $this->token_key;
     }
 
-    public function getMail(){
+    public function getMail() {
         return array(
-            "mail_host" =>  $this->mail_host,
-            "mail_port" =>  $this->mail_port,
-            "mail_smtp_secure"  =>  $this->mail_smtp_secure,
-            "mail_name" =>  $this->mail_name,
-            "mail_user" =>  $this->mail_user,
-            "mail_password" =>  $this->mail_password,
+            "mail_host" => $this->mail_host,
+            "mail_port" => $this->mail_port,
+            "mail_smtp_secure" => $this->mail_smtp_secure,
+            "mail_name" => $this->mail_name,
+            "mail_user" => $this->mail_user,
+            "mail_password" => $this->mail_password,
         );
     }
 
-    public function getServer(){
+    public function getServer() {
         return $this->server;
     }
 
-    public function getUrlBase(){
+    public function getUrlBase() {
         return $this->url_base;
     }
 
-    public function getUrlFront(){
+    public function getUrlFront() {
         return $this->url_front;
     }
 }
+
