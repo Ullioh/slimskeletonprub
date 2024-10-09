@@ -23,8 +23,8 @@ class RutaPostController extends InitController {
         $this->config = new ConfigGlobal(); // Instanciando ConfigGlobal
         $this->mailSender = new MailSender();
 
-        // Obtener la conexión a la base de datos
-        $db = $this->config->getDb(); // Ahora devuelve una instancia de PDO
+        // Cambiar getDb() a getPostDb()
+        $db = $this->config->getPostDb(); // Ahora usa getPostDb()
         $this->testModel = new TestModelPost($db); // Pasando la conexión a TestModelPost
     }
 

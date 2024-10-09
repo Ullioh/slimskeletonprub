@@ -3,6 +3,8 @@ use App\Controller\RutaGetController; //aca hay que cambiar la ubicacion de la r
 use App\Config\Middleware;
 
 
+
+/*
 $app->group('/rutaget/',function(){
 
     $middleware = Middleware::class.":onlyUser";;
@@ -13,6 +15,13 @@ $app->group('/rutaget/',function(){
     //ruta post con json y arreglo para representar los json. 
     // $this->post('mandar', RutaController::class.":mandar" );
 });
+*/ 
+$app->group('/rutaget/', function() {
+    $middleware = Middleware::class . ":onlyUser";
+
+    // Nueva ruta para obtener mensajes
+    $this->get('newget', RutaGetController::class . ":newMethod");
+});
 
 
-?>
+?> 
