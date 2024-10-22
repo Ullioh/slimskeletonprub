@@ -4,13 +4,13 @@ use App\Lib\Database;
 use App\Config\ConfigGlobal;
 use App\Config\InitModel;
 
-class PacientesModel extends InitModel{
+class TratamientosModel extends InitModel{
     private $db;
-    private $table = 'pacientes';
-    private $column = array("cedula","nombre","genero","edad");
-    private $column_select = array("id","cedula","nombre","genero","edad");
-    private $column_update = array("nombre", "genero", "edad");
-    private $column_filter = array("cedula","nombre","genero","edad");
+    private $table = 'tratamientos';
+    private $column = array("descripcion");
+    private $column_select = array("id","descripcion");
+    private $column_update = array("descripcion");
+    private $column_filter = array("descripcion");
     private $url;
 
     public function __CONSTRUCT()

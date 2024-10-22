@@ -21,7 +21,7 @@ class ConfigGlobal{
 
     public function __CONSTRUCT(){
         //DB
-        $this->dbname = "test_slim";
+        $this->dbname = "test_slim2";
         $this->dbuser = "root";
         $this->dbpassword = "";
 
