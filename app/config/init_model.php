@@ -91,6 +91,7 @@ class InitModel{
     public function getBy($data){
         try {
             $filter = $this->getDataNotRelation($data);
+            $this->whereSql = empty($this->whereSql) ? "":" and ".$this->whereSql;
 
             $sql = "SELECT ".implode(",",$this->col_select)." FROM $this->table $this->inner WHERE (".implode("and",$filter[0]).") ".$this->getDelete().$this->whereSql.$this->groupBySql.$this->orderBySql.$this->limitSql;  
             $stm = $this->db->prepare($sql);
@@ -128,7 +129,7 @@ class InitModel{
                 }
             }
             $sql = "SELECT ".implode(",",$this->col_select)." FROM $this->table $this->inner  
-            ".$getDelete.$this->whereSql." ".$this->orderBySql;  
+            WHERE ".$this->whereSql.$getDelete." ".$this->groupBySql." ".$this->orderBySql.$this->limitSql;  
             $stm = $this->db->prepare($sql);
             $stm->execute();
 
@@ -144,7 +145,7 @@ class InitModel{
         $sea = $data['search'];
         return [
             "rows"  =>  $this->getPaginationRows($lim,$pos,$sea),
-            "count" =>  $this->getPaginationCount($lim,$pos,$sea)->total
+            "count" =>  $this->getPaginationCount($lim,$pos,$sea) ? $this->getPaginationCount($lim,$pos,$sea)->total:0
         ];
     }
 
@@ -152,8 +153,10 @@ class InitModel{
         try {
             $filter = implode(" like '%$sea%' or ",$this->col_filter)." like '%$sea%'";
             $getDelete = empty($this->getDeleteWithoutWhere()) ? "":$this->getDeleteWithoutWhere()." and ";
-            $sql = "SELECT ".implode(",",$this->col_select)." FROM $this->table WHERE 
-            ".$getDelete." ($filter) ".$this->whereSql." limit $pos,$lim"; 
+            $this->whereSql = empty($this->whereSql) ? "":" and ".$this->whereSql;
+            $sql = "SELECT ".implode(",",$this->col_select)." FROM $this->table $this->inner WHERE 
+            ".$getDelete." ($filter) ".$this->whereSql." $this->groupBySql $this->orderBySql limit $pos,$lim"; 
+            // echo $sql;
             $stm = $this->db->prepare($sql);
             $stm->execute();
 
@@ -167,8 +170,8 @@ class InitModel{
         try {
             $filter = implode(" like '%$sea%' or ",$this->col_filter)." like '%$sea%'";
             $getDelete = empty($this->getDeleteWithoutWhere()) ? "":$this->getDeleteWithoutWhere()." and ";
-            $sql = "SELECT count(id) as total FROM $this->table WHERE 
-            ".$getDelete." ($filter)".$this->whereSql; 
+            $sql = "SELECT count($this->table.id) as total FROM $this->table $this->inner WHERE 
+            ".$getDelete." ($filter) ".$this->whereSql." ".$this->groupBySql; 
             $stm = $this->db->prepare($sql);
             $stm->execute();
 
