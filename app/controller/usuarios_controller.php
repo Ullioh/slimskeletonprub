@@ -41,7 +41,8 @@ class UsuariosController extends InitController{
         if (!$data = $this->validateData($this->validate)) {
             return $this->ending($res, $this->validate); }
 
-        $hashedPassword = password_hash($data['password'], PASSWORD_DEFAULT);
+        $options = ['cost' => 12,];
+        $hashedPassword = password_hash($data['password'], PASSWORD_BCRYPT, $options);
 
         $add = $this->UsuariosModel->insert([
             "user"      => $data['user'],
