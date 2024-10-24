@@ -10,8 +10,7 @@ use App\Config\ConfigGlobal;
 use App\Lib\MailSender;
 use App\Model\UsuariosModel;
 
-class UsuariosController extends InitController
-{
+class UsuariosController extends InitController{
     private $validate;
     private $respuesta;
     private $config;
@@ -32,26 +31,24 @@ class UsuariosController extends InitController
     }
  
 
-    public function Register($req, $res, $args){
+    public function Register($req, $res, $args) {
         $var = $req->getParsedBody();
         $this->validate->setRequireExtended($var, array(
             "user"      => array("type" => "is_string"),
             "password"  => array("type" => "is_string"),
-
         ));
         
-        if(!$data = $this->validateData($this->validate)){
-            return $this->ending($res, $this->validate);
-        }
+        if (!$data = $this->validateData($this->validate)) {
+            return $this->ending($res, $this->validate); }
+
+        $hashedPassword = password_hash($data['password'], PASSWORD_DEFAULT);
 
         $add = $this->UsuariosModel->insert([
             "user"      => $data['user'],
-            "password"  => $data['password']
-        ]);
+            "password"  => $hashedPassword]);
 
         $query = $this->UsuariosModel->getBy([
-            "id" => $add
-        ]);
+            "id" => $add ]);
 
         $this->respuesta->setResponse(true, 200, "");
         $this->respuesta->data = $query;
@@ -59,7 +56,8 @@ class UsuariosController extends InitController
             ->withHeader('Content-type', 'application/json')
             ->withStatus(200)
             ->write(
-                json_encode($this->respuesta));
+                json_encode($this->respuesta)
+            );
     }
 
     public function Login($req, $res, $args){
@@ -76,6 +74,7 @@ class UsuariosController extends InitController
         $query = $this->UsuariosModel
         ->where("users.user = '".$data["user"]."'")
         ->first();
+
         if($query){
             if (password_verify($data["password"], $query->password)) {
                 $this->respuesta->setResponse(true,200,"");
@@ -90,7 +89,7 @@ class UsuariosController extends InitController
                 $sendData['token'] = $token;
             }
                 $this->respuesta->setResponse(true, 200, "");
-                $this->respuesta->data = $data;
+                $this->respuesta->data = $sendData;
                 return $res
                     ->withHeader('Content-type', 'application/json')
                     ->withStatus(200)
@@ -98,5 +97,8 @@ class UsuariosController extends InitController
                         json_encode($this->respuesta));
         }
     }
+
+
+
 
 }
